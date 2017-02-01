@@ -21,8 +21,8 @@ plugins {
 }
 */
 version = "0.0.1.0"
-group= "me.momocow.general"
-archivesBaseName = "MoAPI-1.9.4"
+group= "me.momocow.mobasic"
+archivesBaseName = "MoBasic-1.9.4"
 
 sourceSets {
     main {
