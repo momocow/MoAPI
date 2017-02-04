@@ -1,0 +1,17 @@
+[
+{
+  "modid": "MoBasic",
+  "name": "MomoCow Basic Utility",
+  "description": "Basic custom usage against vanilla Minecraft stuff.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "logoFile": "",
+  "url": "http://minecraft.momocow.me/mods",
+  "updateUrl": "http://minecraft.momocow.me/mods/mobasic.versions.json",
+  "authorList": ["MomoCow"],
+  "credits": "",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": ["Forge"]
+}
+]
