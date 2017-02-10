@@ -1,13 +1,15 @@
 package me.momocow.mobasic.proxy;
 
+import java.util.Map.Entry;
 import java.util.UUID;
 
-import com.mojang.authlib.GameProfile;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Server 
@@ -52,8 +54,22 @@ public class Server
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(username);
 	}
 
-	public static GameProfile getPlayerProfile(String username)
+	@Nullable
+	public static String getPlayerName(UUID uid)
 	{
-		return getServer().getPlayerProfileCache().getGameProfileForUsername(username);
+		return UsernameCache.getLastKnownUsername(uid);
+	}
+	
+	@Nullable
+	public static UUID getPlayerId(String name)
+	{
+		for(Entry<UUID, String> user: UsernameCache.getMap().entrySet())
+		{
+			if(((String)user.getValue()).equals(name))
+			{
+				return (UUID) user.getKey();
+			}
+		}
+		return null;
 	}
 }
