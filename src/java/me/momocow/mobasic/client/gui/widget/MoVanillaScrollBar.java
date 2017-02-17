@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class MoVanillaScrollBar implements MoScrollable
 {
-	private static ResourceLocation TEXTURE;
+	private ResourceLocation TEXTURE;
 	
 	private boolean isEnabled = false;
 	private boolean isDragged = false;
@@ -25,19 +25,24 @@ public class MoVanillaScrollBar implements MoScrollable
 	 */
 	private int clickedGuiY = 0;
 	
+	public MoVanillaScrollBar(int x, int y, float z, int maxY, int width, int height, int stageCount, ResourceLocation texture)
+	{
+		this(x, y, z, maxY, width, height, stageCount, 0, texture);
+	}
 	
-	public MoVanillaScrollBar(int x, int y, float z, int my, int w, int h, int s, ResourceLocation texture)
+	public MoVanillaScrollBar(int x, int y, float z, int maxY, int width, int height, int stageCount, int initialStage, ResourceLocation texture)
 	{
 		this.posX = x;
 		this.posY = y;
 		this.zLevel = z;
 		this.minY = y;
-		this.maxY = my;
-		this.width = w;
-		this.height = h;
-		this.stageNum = Math.max(s, 1);
+		this.maxY = maxY;
+		this.width = width;
+		this.height = height;
+		this.stageNum = Math.max(stageCount, 1);
 		this.isEnabled = (this.stageNum > 1);
-		TEXTURE = texture;
+		this.stage = initialStage;
+		this.TEXTURE = texture;
 
 		if(this.stageNum > 1)
 		{
@@ -48,7 +53,7 @@ public class MoVanillaScrollBar implements MoScrollable
 	public void drawScrollBar()
 	{
 		int textureX = (this.isEnabled)? 0: 12;
-		MoGuiScreen.drawPartialScaleTexturedRect(MoVanillaScrollBar.TEXTURE, this.posX, this.posY, this.zLevel, textureX, 0, 12, 15, 24, 15, this.width, this.height);
+		MoGuiScreen.drawPartialScaleTexturedRect(TEXTURE, this.posX, this.posY, this.zLevel, textureX, 0, 12, 15, 24, 15, this.width, this.height);
 	}
 	
 	public boolean isDragged()

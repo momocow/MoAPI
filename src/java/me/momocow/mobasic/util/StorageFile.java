@@ -23,18 +23,19 @@ public class StorageFile<T extends Serializable>
 	private final String encoding;
 	private T content = null;
 	
-	public StorageFile(File storageFile) throws Exception
+	public StorageFile(T cnt, File storageFile) throws Exception
 	{
-		this(storageFile, LogManager.getLogger());
+		this(cnt, storageFile, LogManager.getLogger());
 	}
 	
-	public StorageFile(File storageFile, Logger logger) throws Exception
+	public StorageFile(T cnt, File storageFile, Logger logger) throws Exception
 	{
-		this(storageFile, logger, "UTF-8");
+		this(cnt, storageFile, logger, "UTF-8");
 	}
 	
-	public StorageFile(File storageFile, Logger logger, String encoding) throws Exception
+	public StorageFile(T cnt, File storageFile, Logger logger, String encoding) throws Exception
 	{
+		this.content = cnt;
 		this.storageFile = storageFile;
 		this.logger = logger;
 		this.encoding = encoding;
@@ -63,28 +64,31 @@ public class StorageFile<T extends Serializable>
 	@SuppressWarnings("unchecked")
 	public T load() throws Exception
 	{
-		if(this.content == null)
+		if(!this.storageFile.exists())
 		{
-			if(!this.storageFile.exists())
+			FileUtils.forceMkdir(this.storageFile.getParentFile());
+			this.storageFile.createNewFile();
+			logger.info("The storage is created. " + this.storageFile.getAbsolutePath());
+		}
+		else
+		{
+			ObjectInputStream ois  = null;
+			T object = null;
+			try
 			{
-				FileUtils.forceMkdir(this.storageFile.getParentFile());
-				this.storageFile.createNewFile();
-				logger.info("The storage is created. " + this.storageFile.getAbsolutePath());
+				ois = new ObjectInputStream(new FileInputStream(this.storageFile));
+				object = (T) ois.readObject();
 			}
-			else
+			catch(EOFException e){}
+			finally
 			{
-				ObjectInputStream ois  = null;
-				try
-				{
-					ois = new ObjectInputStream(new FileInputStream(this.storageFile));
-					this.content = (T) ois.readObject();
-				}
-				catch(EOFException e){}
-				finally
-				{
-					if(ois != null) ois.close();
-				}
+				if(ois != null) ois.close();
+			}
+
+			if(object != null)
+			{
 				logger.info("The storage is read. " + this.storageFile.getAbsolutePath());
+				this.content = object;
 			}
 		}
 		
@@ -101,7 +105,6 @@ public class StorageFile<T extends Serializable>
 			oos.writeObject(this.content);
 			oos.flush();
 			oos.close();
-			logger.info("The storage is saved. " + this.storageFile.getAbsolutePath());
 		}
 		catch(Exception e)
 		{

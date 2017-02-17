@@ -1,10 +1,17 @@
 package me.momocow.mobasic.client.gui;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,6 +21,8 @@ import net.minecraft.util.ResourceLocation;
 
 public abstract class MoGuiScreen extends GuiScreen
 {
+	private Map<Integer, List<String>> tooltips= new HashMap<Integer, List<String>>();
+	
 	protected String unlocalizedName = "";
 	public int rowHeight = 10;
 	public int colWidth = 10;
@@ -154,6 +163,71 @@ public abstract class MoGuiScreen extends GuiScreen
     	}
 	}
 	
+	public void drawButtonList(int mouseX, int mouseY)
+	{
+		for (int i = 0; i < this.buttonList.size(); ++i)
+        {
+            ((GuiButton)this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);
+        }
+	}
+	
+	protected void openWebLink(URI url)
+    {
+        try
+        {
+            Class<?> oclass = Class.forName("java.awt.Desktop");
+            Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object)null, new Object[0]);
+            oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {url});
+        }
+        catch (Throwable throwable1)
+        {
+            Throwable throwable = throwable1.getCause();
+            LogManager.getLogger(this.getClass().getName()).error("Couldn\'t open link: {}", new Object[] {throwable == null ? "<UNKNOWN>" : throwable.getMessage()});
+        }
+    }
+	
+	public void clearTooltip(int id)
+	{
+		if(this.tooltips.get(id) != null)
+		{
+			this.tooltips.get(id).clear();
+		}
+	}
+	
+	public void addTooltip(int id, List<String> ttp)
+	{
+		if(this.tooltips.get(id) != null)
+		{
+			this.tooltips.get(id).addAll(ttp);
+		}
+		else
+		{
+			this.tooltips.put(id, ttp);
+		}
+	}
+	
+	public void addTooltip(int id, String ttp)
+	{
+		if(this.tooltips.get(id) != null)
+		{
+			this.tooltips.get(id).add(ttp);
+		}
+		else
+		{
+			List<String> l = new ArrayList<String>();
+			l.add(ttp);
+			this.tooltips.put(id, l);
+		}
+	}
+	
+	public void drawTooltip(int id, int x, int y)
+	{
+		if(this.tooltips.get(id) != null)
+		{
+			this.drawHoveringText(this.tooltips.get(id), x, y);
+		}
+	}
+	
 	/**
 	 * <p>Compatible texture drawing method for any size of images</p>
 	 * <p>Parameters, x and y, define the right top point on the screen.</p>
@@ -204,6 +278,7 @@ public abstract class MoGuiScreen extends GuiScreen
 	 * @param texture
 	 * @param x
 	 * @param y
+	 * @param zLevel
 	 * @param textureX
 	 * @param textureY
 	 * @param width
@@ -215,7 +290,7 @@ public abstract class MoGuiScreen extends GuiScreen
 	 */
 	public static void drawProportionTexturedRect(ResourceLocation texture, int x, int y, float zLevel, int textureX, int textureY, int width, int height, int imageWidth, int imageHeight, int guiWidth, int guiHeight)
 	{
-		double scale = Math.min(Math.floor((double)guiHeight / (double) height), Math.floor((double)guiWidth / (double)width));
+		double scale = Math.min((double)guiHeight / (double) height, (double)guiWidth / (double)width);
 		MoGuiScreen.drawTexturedRect(texture, (double)x, (double)y, (double)zLevel, textureX, textureY, width, height, imageWidth, imageHeight, scale, scale);
 	}
 	
