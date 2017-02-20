@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -225,6 +226,18 @@ public abstract class MoGuiScreen extends GuiScreen
 		if(this.tooltips.get(id) != null)
 		{
 			this.drawHoveringText(this.tooltips.get(id), x, y);
+		}
+	}
+	
+	public void drawCenteredString(FontRenderer fontObj, String text, int centeredX, int y, int colorCode, boolean hasShadow)
+	{
+		if(hasShadow)
+		{
+			this.drawCenteredString(fontObj, text, centeredX, y, colorCode);
+		}
+		else
+		{
+			fontObj.drawString(text, centeredX - fontObj.getStringWidth(text) / 2, y, colorCode);
 		}
 	}
 	
