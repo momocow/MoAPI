@@ -558,13 +558,16 @@ public class MoTextField extends Gui
     {
         if (this.getVisible())
         {
-        	if(this.isEnabled)
+        	if(this.texture != null)
         	{
-        		MoGuiScreen.drawPartialScaleTexturedRect(this.texture, this.xPosition, this.yPosition, this.zLevel, this.enabledX, this.enabledY, this.textureWidth, this.textureHeight, this.imageWidth, this.imageHeight, this.width, this.height);
-        	}
-        	else
-        	{
-        		MoGuiScreen.drawPartialScaleTexturedRect(this.texture, this.xPosition, this.yPosition, this.zLevel, this.disabledX, this.disabledY, this.textureWidth, this.textureHeight, this.imageWidth, this.imageHeight, this.width, this.height);
+	        	if(this.isEnabled)
+	        	{
+	        		MoGuiScreen.drawPartialScaleTexturedRect(this.texture, this.xPosition, this.yPosition, this.zLevel, this.enabledX, this.enabledY, this.textureWidth, this.textureHeight, this.imageWidth, this.imageHeight, this.width, this.height);
+	        	}
+	        	else
+	        	{
+	        		MoGuiScreen.drawPartialScaleTexturedRect(this.texture, this.xPosition, this.yPosition, this.zLevel, this.disabledX, this.disabledY, this.textureWidth, this.textureHeight, this.imageWidth, this.imageHeight, this.width, this.height);
+	        	}
         	}
 
             int i = this.isEnabled ? this.enabledColor : this.disabledColor;
@@ -760,6 +763,11 @@ public class MoTextField extends Gui
     public void setEnabled(boolean enabled)
     {
         this.isEnabled = enabled;
+    }
+    
+    public boolean getEnabled()
+    {
+        return this.isEnabled;
     }
 
     /**

@@ -5,8 +5,12 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.UserListBans;
+import net.minecraft.server.management.UserListIPBans;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.UsernameCache;
@@ -71,5 +75,20 @@ public class Server
 			}
 		}
 		return null;
+	}
+	
+	public static UserListIPBans getBannedIPs()
+	{
+		return getServer().getPlayerList().getBannedIPs();
+	}
+	
+	public static UserListBans getBannedPlayers()
+	{
+		return getServer().getPlayerList().getBannedPlayers();
+	}
+	
+	public static GameProfile getProfile(UUID player)
+	{
+		return getServer().getPlayerProfileCache().getProfileByUUID(player);
 	}
 }
