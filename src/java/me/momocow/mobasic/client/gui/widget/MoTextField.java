@@ -632,7 +632,7 @@ public class MoTextField extends Gui
     /**
      * Draws the current selection and a vertical line cursor in the text box.
      */
-    protected void drawCursorVertical(int startX, int startY, int endX, int endY)
+    public void drawCursorVertical(int startX, int startY, int endX, int endY)
     {
         if (startX < endX)
         {
@@ -808,7 +808,7 @@ public class MoTextField extends Gui
 
         if (this.fontRendererInstance != null)
         {
-            if (this.lineScrollOffset > i)
+            if (this.lineScrollOffset > i)	 //value bound check
             {
                 this.lineScrollOffset = i;
             }
@@ -817,12 +817,12 @@ public class MoTextField extends Gui
             String s = this.fontRendererInstance.trimStringToWidth(this.text.substring(this.lineScrollOffset), j);
             int k = s.length() + this.lineScrollOffset;
 
-            if (position == this.lineScrollOffset)
+            if (position == this.lineScrollOffset)	//scroll back
             {
                 this.lineScrollOffset -= this.fontRendererInstance.trimStringToWidth(this.text, j, true).length();
             }
 
-            if (position > k)
+            if (position > k) //scroll forward
             {
                 this.lineScrollOffset += position - k;
             }
