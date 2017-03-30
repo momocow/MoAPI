@@ -613,7 +613,7 @@ public class MoTextField extends Gui
             {
                 if (flag2)
                 {
-                    Gui.drawRect(k1, i1 - 1, k1 + 1, i1 + 1 + this.fontRendererInstance.FONT_HEIGHT, -3092272);
+                    Gui.drawRect(k1, i1, k1 + 1, i1 + this.fontRendererInstance.FONT_HEIGHT, this.enabledColor | -16777216);
                 }
                 else
                 {
