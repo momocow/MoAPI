@@ -102,6 +102,15 @@ public class  MoTextArea
 				}
 				return true;
 			}
+			else if(keyCode == 15) //tab
+	        {
+				if(this.content.size() ==1 && this.content.get(0).isEmpty())
+				{
+					this.content.remove(0);
+				}
+	        	this.setFocused(false);
+	        	return true;
+	        }
 			
 			//make some operation around the cursor
 			this.markDirtyDisplay();

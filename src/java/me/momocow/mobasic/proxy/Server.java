@@ -1,5 +1,7 @@
 package me.momocow.mobasic.proxy;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -90,5 +92,25 @@ public class Server
 	public static GameProfile getProfile(UUID player)
 	{
 		return getServer().getPlayerProfileCache().getProfileByUUID(player);
+	}
+	
+	public static GameProfile getProfile(String player)
+	{
+		return getServer().getPlayerProfileCache().getGameProfileForUsername(player);
+	}
+	
+	public static List<GameProfile> getProfile()
+	{
+		List<GameProfile> players = new ArrayList<GameProfile>();
+		for(String username: getServer().getPlayerProfileCache().getUsernames())
+		{
+			GameProfile profile = getProfile(username);
+			if(profile != null)
+			{
+				players.add(profile);
+			}
+		}
+		
+		return players;
 	}
 }

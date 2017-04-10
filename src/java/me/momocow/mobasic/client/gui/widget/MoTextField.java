@@ -371,6 +371,11 @@ public class MoTextField extends Gui
         {
             return false;
         }
+        else if(keyCode == 15)
+        {
+        	this.setFocused(false);
+        	return true;
+        }
         else if (GuiScreen.isKeyComboCtrlA(keyCode))
         {
             this.setCursorPositionEnd();
