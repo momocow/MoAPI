@@ -83,7 +83,7 @@ public class  MoTextArea
 	
 	public boolean keyTyped(char typedChar, int keyCode)
 	{
-		if(this.isFocused)
+		if(this.isEnabled && this.isFocused)
 		{
 			//no matter where the cursor is			
 			if(keyCode == 201)	//page up
@@ -316,33 +316,36 @@ public class  MoTextArea
 	 * @param mouseButton
 	 */
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton)
-	{	
-		//none of the textfields is clicked
-		//check if the textarea is clicked, if true, focus on the last enabled textfield
-		if(this.isDominantArea(mouseX, mouseY))
+	{
+		if(this.isEnabled)
 		{
-			this.isFocused = true;
-			this.markDirtyDisplay();
-			
-			int clickedLine = this.displayStartLine + this.getClickedLine(mouseY);
-			int clickedPos = this.getClickedPos(clickedLine, mouseX);
-			if(this.hasContentLine(clickedLine) && clickedPos >= 0)
+			//none of the textfields is clicked
+			//check if the textarea is clicked, if true, focus on the last enabled textfield
+			if(this.isDominantArea(mouseX, mouseY))
 			{
-				this.setCursorAt(clickedLine, clickedPos);
+				this.isFocused = true;
+				this.markDirtyDisplay();
+				
+				int clickedLine = this.displayStartLine + this.getClickedLine(mouseY);
+				int clickedPos = this.getClickedPos(clickedLine, mouseX);
+				if(this.hasContentLine(clickedLine) && clickedPos >= 0)
+				{
+					this.setCursorAt(clickedLine, clickedPos);
+				}
+				else
+				{
+					this.cursorManager.setCursorAtDisplayEnd();
+				}
+				this.cursorManager.setSelectionEnd(this.getCursorLine(), this.getCursorPos());
+				return;
 			}
-			else
+	
+			if(this.content.size() ==1 && this.content.get(0).isEmpty())
 			{
-				this.cursorManager.setCursorAtDisplayEnd();
+				this.content.remove(0);
 			}
-			this.cursorManager.setSelectionEnd(this.getCursorLine(), this.getCursorPos());
-			return;
+			this.isFocused = false;
 		}
-
-		if(this.content.size() ==1 && this.content.get(0).isEmpty())
-		{
-			this.content.remove(0);
-		}
-		this.isFocused = false;
 	}
 	
 	public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) 
@@ -459,6 +462,11 @@ public class  MoTextArea
 				int displayCursorX = this.x + this.margin + textWidth;
 				int displayCursorY = this.getLineY(this.getCursorLine() - this.displayStartLine);
 				Gui.drawRect(displayCursorX, displayCursorY, displayCursorX + 1, displayCursorY + this.lineHeight - 1, -12369085);
+			}
+			
+			if(!this.isEnabled)
+			{
+				Gui.drawRect(this.x, this.y, this.x + this.width, this.y + this.getHeight(), 1145258819);
 			}
 		}
 	}
